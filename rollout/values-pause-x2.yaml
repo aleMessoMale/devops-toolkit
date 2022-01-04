@@ -15,6 +15,7 @@ hpa: true
 rollout:
   # abilitiamo il rollout
   enabled: true
+  # gli STEP definiscono cosa fare e in che ordine
   # qua definiamo gli step di weight del traffico da redirigere (20, 40, 60, 80) separati da pause indefinite
   # che son da sbloccare a mano quando noi facciamo passare al next step manualmente
   # in alcuni casi gli step han durata definita dalla duration in secondi
