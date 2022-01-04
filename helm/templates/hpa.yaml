@@ -1,6 +1,7 @@
 {{- if .Values.hpa }}
 ---
-
+# nel caso di progressive deployment e di argo rollout, anziché puntare un deployment o uno statefulset, puntiamo
+# un oggetto di tipologia RollOut
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:

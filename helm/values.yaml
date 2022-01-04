@@ -1,3 +1,6 @@
+# la maggior parte di questi valori in values.yaml, possono essere considerati il default
+# per un'applicazione production ready
+# abbiamo la possibilità di abilitare argo rollout ecc ecc
 image:
   repository: vfarcic/devops-toolkit-series
   tag: latest

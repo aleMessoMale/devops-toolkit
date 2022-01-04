@@ -1,6 +1,7 @@
 {{- if .Values.istio.enabled }}
 ---
-
+# la modifica maggiore che abbiamo è quella di avere due route nel virtual service di istio
+#
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
@@ -15,6 +16,7 @@ spec:
   - {{ .Values.ingress.host }}
   http:
   - name: primary
+    # le due route al momento son impostate per avere il 100% del traffico sul servizio stable e 0 su quello canary
     route:
     - destination:
         host: {{ template "fullname" . }}

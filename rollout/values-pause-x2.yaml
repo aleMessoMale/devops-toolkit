@@ -1,18 +1,35 @@
+# abiitiamo e disabilitiamo, utilizzando i templates di helm, quindi gli if con il valore che applicano o meno
+# una certa parte di manifest (o interamente)
+# disabilitiamo l'ingress nell'app
+
+# questo file yaml viene passato per deployare un'app tramite helm e questi sono i valori con i quali noi andiamo a
+# sovrascivere l'app packettizata con helm presente in helm/templates in questo stesso repo
 ingress:
   enabled: false
+# abilitiamo istio
 istio:
   enabled: true
+# abilitiamo horizontal autoscaling
 hpa: true
+
 rollout:
+  # abilitiamo il rollout
   enabled: true
+  # qua definiamo gli step di weight del traffico da redirigere (20, 40, 60, 80) separati da pause indefinite
+  # che son da sbloccare a mano quando noi facciamo passare al next step manualmente
+  # in alcuni casi gli step han durata definita dalla duration in secondi
   steps:
+  # traffico da redirigere
   - setWeight: 20
+  # pausa da effettuare
   - pause: {}
   - setWeight: 40
   - pause: {}
   - setWeight: 60
+  # pausa da effettuare con la durata in secondi che deve attendere
   - pause: {duration: 10}
   - setWeight: 80
   - pause: {duration: 10}
+  # l'analisi in questo step è false
   analysis:
     enabled: false

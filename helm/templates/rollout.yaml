@@ -1,6 +1,8 @@
 {{- if .Values.rollout.enabled }}
 ---
-
+# son simili a dei Deployment, tutto quello che possiamo definire come Deployment si può definire come Rollout
+# le maggiori differenze sono la definizione di due tipologie nuove di deployment:
+# spec.strategy: bluegreen | canary
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -42,18 +44,24 @@ spec:
         resources:
 {{ toYaml .Values.resources | indent 12 }}
   strategy:
+    # questa è una delle maggiori differenze
     canary:
+      # questo è il servizio che verrà deployato come canary
       canaryService: {{ template "fullname" . }}-canary
+      # questo è il servizio attualmente presente o comunque quello dove andrà la maggior parte del traffico
       stableService: {{ template "fullname" . }}
+      # qua inoltre vediamo come effettuiamo il routing del traffico, nel nostro caso, avendo installato istio, avviene tramite istio
       trafficRouting:
         istio:
           virtualService:
             name: {{ template "fullname" . }}
             routes:
             - primary
+      # qua abbiamo gli steps
       steps:
 {{ toYaml .Values.rollout.steps | indent 6 }}
 {{- if .Values.rollout.analysis.enabled }}
+      # qua abbiamo la parte di analysis (skippabile nel nostro caso tramite un valore sullo yaml values)
       analysis:
         templates:
         - templateName: {{ template "fullname" . }}
@@ -119,6 +127,8 @@ spec:
       
 ---
 
+# questo service verrà usato solo nel processo di release del servizio, negli altri casi, il servizio definito sarà
+# quello utilizzato, l'unica cosa che dovrebbe cambiare è il nome
 apiVersion: v1
 kind: Service
 metadata:
